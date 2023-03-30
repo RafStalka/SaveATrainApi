@@ -1,0 +1,91 @@
+{
+  "passengers": 1,
+  "result": {
+    "outbound": [
+      {
+        "origin_station": "SAT_UK_LO_DXLIF",
+        "destin_station": "SAT_NL_AM_WGRFL",
+        "departure_date": "2023-03-13",
+        "departure_time": "06:16",
+        "duration": "3h57m",
+        "arrival_date": "2023-03-13",
+        "arrival_time": "11:13",
+        "changes": 0,
+        "operator": "EUROSTAR",
+        "connections": "NULL",
+        "price": {
+          "second_class": 111,
+          "first_class": 184,
+          "business_class": 385.25
+        },
+        "train_numbers": "eurostar 9106",
+        "departure_connections": "NULL",
+        "arrival_connections": "NULL",
+        "layover_connections": "NULL"
+      },
+      {
+        "origin_station": "SAT_UK_LO_DXLIF",
+        "destin_station": "SAT_NL_AM_WGRFL",
+        "departure_date": "2023-03-13",
+        "departure_time": "08:16",
+        "duration": "3h57m",
+        "arrival_date": "2023-03-13",
+        "arrival_time": "13:13",
+        "changes": 0,
+        "operator": "EUROSTAR",
+        "connections": "NULL",
+        "price": {
+          "second_class": 171,
+          "first_class": 263,
+          "business_class": 385.25
+        },
+        "train_numbers": "eurostar 9114",
+        "departure_connections": "NULL",
+        "arrival_connections": "NULL",
+        "layover_connections": "NULL"
+      },
+      {
+        "origin_station": "SAT_UK_LO_DXLIF",
+        "destin_station": "SAT_NL_AM_WGRFL",
+        "departure_date": "2023-03-13",
+        "departure_time": "11:04",
+        "duration": "4h9m",
+        "arrival_date": "2023-03-13",
+        "arrival_time": "16:13",
+        "changes": 0,
+        "operator": "EUROSTAR",
+        "connections": "NULL",
+        "price": {
+          "second_class": 250,
+          "first_class": 0,
+          "business_class": 385.25
+        },
+        "train_numbers": "eurostar 9126",
+        "departure_connections": "NULL",
+        "arrival_connections": "NULL",
+        "layover_connections": "NULL"
+      },
+      {
+        "origin_station": "SAT_UK_LO_DXLIF",
+        "destin_station": "SAT_NL_AM_WGRFL",
+        "departure_date": "2023-03-13",
+        "departure_time": "18:01",
+        "duration": "4h12m",
+        "arrival_date": "2023-03-13",
+        "arrival_time": "23:13",
+        "changes": 0,
+        "operator": "EUROSTAR",
+        "connections": "NULL",
+        "price": {
+          "second_class": 171,
+          "first_class": 236,
+          "business_class": 385.25
+        },
+        "train_numbers": "eurostar 9152",
+        "departure_connections": "NULL",
+        "arrival_connections": "NULL",
+        "layover_connections": "NULL"
+      }
+    ]
+  }
+}
