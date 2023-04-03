@@ -50,28 +50,37 @@ public class BaseAPIBookTest {
         String endStation = "SAT_DE_GI_CTAQI";
         String ddate = "2023-05-13 07:00";
 
-        String payload = "{\n" +
-                "    \"departure_datetime\": \"2023-04-05 07:00\",\n" +
-                "    \"return_departure_datetime\": \"2023-04-05 07:00\",\n" +
-                "    \"searches_passengers_attributes\": {\n" +
-                "      \"0\": {\n" +
-                "        \"age\": 21,\n" +
-                "        \"passenger_type_attributes\": {\n" +
-                "          \"type\": \"Search::PassengerType::Adult\"\n" +
-                "        }\n" +
-                "      }\n" +
-                "    },\n" +
-                "    \"route_attributes\": {\n" +
-                "      \"origin_station_attributes\": {\n" +
-                "        \"uid\": \"SAT_FR_MA_XYPQB\"\n" +
-                "      },\n" +
-                "      \"destination_station_attributes\": {\n" +
-                "        \"uid\": \"SAT_FR_TO_AWHSU\"\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }";
+        PassengerTypeAttributes passengerTypeAttributes = new PassengerTypeAttributes();
+        passengerTypeAttributes.setType("Search::PassengerType::Adult");
+
+        _0 _0 = new _0();
+        _0.setAge(21);
+        _0.setPassengerTypeAttributes(passengerTypeAttributes);
+
+        SearchesPassengersAttributes searchesPassengersAttributes = new SearchesPassengersAttributes();
+        searchesPassengersAttributes.set0(_0);
+
+        OriginStationAttributes originStationAttributes = new OriginStationAttributes();
+        originStationAttributes.setUid(orgStation);
+
+        DestinationStationAttributes destinationStationAttributes = new DestinationStationAttributes();
+        destinationStationAttributes.setUid(endStation);
+
+        RouteAttributes routeAttributes = new RouteAttributes();
+        routeAttributes.setOriginStationAttributes(originStationAttributes);
+        routeAttributes.setDestinationStationAttributes(destinationStationAttributes);
+
+
+
+        Example example = new Example();
+        example.setDepartureDatetime(ddate);
+        example.setReturnDepartureDatetime(ddate);
+        example.setSearchesPassengersAttributes(searchesPassengersAttributes);
+        example.setRouteAttributes(routeAttributes);
+
+
         Response response = given().
-                body(payload).
+                body(example).
                 when().
                 post("/searches").
                 then().
@@ -95,8 +104,8 @@ public class BaseAPIBookTest {
 
     @Test(dataProvider ="excel-data")
     public void searchWithDataProvPricesApiBook(String orginStation1, String destStation1) {
-        //String orgStation = "SAT_AT_AU_EQRKO";
-        //String endStation = "SAT_DE_GI_CTAQI";
+        String orgStation = "SAT_AT_AU_EQRKO";
+        String endStation = "SAT_DE_GI_CTAQI";
         String ddate = "2023-05-13 07:00";
 
         PassengerTypeAttributes passengerTypeAttributes = new PassengerTypeAttributes();
