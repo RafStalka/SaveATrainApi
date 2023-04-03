@@ -8,24 +8,35 @@ import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import static io.restassured.RestAssured.*;
 
 public class BaseAPISearchTest {
 
-    @BeforeMethod
+    String orgStation = "SAT_FR_MA_XYPQB";
+    String endStation = "SAT_FR_TO_AWHSU";
+    String ddate = "2023-04-05";
+
+    @BeforeMethod()
     public void beforeMethod(Method m) {
         System.out.println("STARTING TEST: " + m.getName());
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
         requestSpecBuilder.setUrlEncodingEnabled(false);
-        requestSpecBuilder.setBaseUri("https://apisearch.saveatrain.com/search/SAT_FR_PA_WXNGQ/SAT_UK_LO_DXLIF");
+        requestSpecBuilder.setBaseUri("https://apisearch.saveatrain.com/search/" + orgStation + "/" + endStation);
         requestSpecBuilder.addParam("triptype", "1");
         requestSpecBuilder.addParam("passengers", "1");
-        requestSpecBuilder.addParam("ddate", "2023-05-08");
+        requestSpecBuilder.addParam("ddate", ddate);
         requestSpecBuilder.addParam("email", "test"+"@"+"saveatrain.com");
         requestSpecBuilder.addParam("password", "bALJat8279B");
         requestSpecBuilder.log(LogDetail.ALL);
@@ -50,75 +61,51 @@ public class BaseAPISearchTest {
                 statusCode(200).
                 extract().response();
 
-        /*List<Object> outbounds = response.jsonPath().getList("result.outbound");
-        System.out.println(outbounds.size());
-        for (int i = 0; i < outbounds.size(); i ++) {
-            System.out.println(outbounds.get(i));
-        }
-
-        String originStation = response.jsonPath().getString("result.outbound.origin_station[0]");
-        System.out.println(originStation);
-
-        List<String> originStations = response.jsonPath().getList("result.outbound.origin_station");
-        System.out.println(originStations.size());
-        for (int i = 0; i < originStations.size(); i ++) {
-            System.out.println("Origin station ==> " + originStations.get(i));
-        }
-
-        String destinStation = response.jsonPath().getString("result.outbound.destin_station[0]");
-        System.out.println(destinStation);
-
-        List<String> destinStations = response.jsonPath().getList("result.outbound.destin_station");
-        System.out.println(destinStations.size());
-        for (int i = 0; i < destinStations.size(); i ++) {
-            System.out.println("Destin station ==> " + destinStations.get(i));
-        }*/
-
-        String departuereTime = response.jsonPath().getString("result.outbound.departure_time[0]");
-        //System.out.println(departuereTime);
-
         List<String> departureTimes = response.jsonPath().getList("result.outbound.departure_time");
         System.out.println(departureTimes.size());
         for (int i = 0; i < departureTimes.size(); i ++) {
             System.out.println("departure_time=" + departureTimes.get(i));
         }
 
-        /*String departuereDate = response.jsonPath().getString("result.outbound.departure_date[0]");
-        System.out.println(departuereDate);
-
-        List<String> departureDates = response.jsonPath().getList("result.outbound.departure_date");
-        System.out.println(departureDates.size());
-        for (int i = 0; i < departureDates.size(); i ++) {
-            System.out.println("departure_date=" + departureDates.get(i));
-        }*/
-
         List<Object> prices = response.jsonPath().getList("result.outbound.price.second_class");
         System.out.println(prices.size());
         for (int i = 0; i < prices.size(); i ++) {
             System.out.println("second_class=" + prices.get(i));
         }
-
     }
 
-    @Test
-    public void getPricesUpdatedAPIBOOK() {
-        RestAssured.defaultParser = Parser.JSON;
+    @DataProvider(name ="excel-data")
+    public Object[][] excelDP() throws IOException {
+        //We are creating an object from the excel sheet data by calling a method that reads data from the excel stored locally in our system
+        Object[][] arrObj = getExcelData("Location of the excel file in your local system","");
+        return arrObj;
+    }
+    //This method handles the excel - opens it and reads the data from the respective cells using a for-loop & returns it in the form of a string array
+    public String[][] getExcelData(String fileName, String sheetName){
 
-        Response responsePOST = given(requestSpecification).
-                when().post("/searches").
-                then().spec(responseSpecification).
-                assertThat().
-                statusCode(200).
-                extract().response();
+        String[][] data = null;
+        try
+        {
+            FileInputStream fis = new FileInputStream(fileName);
+            XSSFWorkbook wb = new XSSFWorkbook(fis);
+            XSSFSheet sh = wb.getSheet(sheetName);
+            XSSFRow row = sh.getRow(0);
+            int noOfRows = sh.getPhysicalNumberOfRows();
+            int noOfCols = row.getLastCellNum();
+            Cell cell;
+            data = new String[noOfRows-1][noOfCols];
 
-
-
-        Response responseGET = given(requestSpecification).
-                when().get().
-                then().spec(responseSpecification).
-                assertThat().
-                statusCode(200).
-                extract().response();
-
+            for(int i =1; i<noOfRows;i++){
+                for(int j=0;j<noOfCols;j++){
+                    row = sh.getRow(i);
+                    cell= row.getCell(j);
+                    data[i-1][j] = cell.getStringCellValue();
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("The exception is: " +e.getMessage());
+        }
+        return data;
     }
 }
