@@ -32,7 +32,7 @@ public class BaseAPIBookTest {
         requestSpecBuilder.setContentType(ContentType.JSON);
         requestSpecBuilder.setBaseUri("https://apibook.saveatrain.com/api");
         requestSpecBuilder.addHeader("X-Agent-Email", "rafal@saveatrain.com");
-        requestSpecBuilder.addHeader("X-Agent-Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpbnN0YW5zZV9jbGFzcyI6IlNhbGVzQWdlbnQiLCJpbnN0YW5jZV9pZCI6bnVsbCwiZXhwaXJhdGlvbl90aW1lIjoiMjAyMy0wNC0yMSAxOTowMjoyMCBVVEMifQ.6o5xnjCw5DVgqs7dOlbb-nCHncn9rszXIVCugi-8ziA");
+        requestSpecBuilder.addHeader("X-Agent-Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpbnN0YW5zZV9jbGFzcyI6IlNhbGVzQWdlbnQiLCJpbnN0YW5jZV9pZCI6MzAsImV4cGlyYXRpb25fdGltZSI6IjIwMjQtMDQtMjQgMTU6MTQ6NTIgVVRDIn0.CImLWJtI_dahynJmbtDk5ko13z1qQaLeQ2COnx7ZCok");
         requestSpecBuilder.log(LogDetail.ALL);
 
         RestAssured.requestSpecification = requestSpecBuilder.build();
@@ -46,9 +46,9 @@ public class BaseAPIBookTest {
 
     @Test
     public void searchPricesApiBook() {
-        String orgStation = "SAT_AT_AU_EQRKO";
-        String endStation = "SAT_DE_GI_CTAQI";
-        String ddate = "2023-05-13 07:00";
+        String orgStation = "SAT_FR_LY_VCNFT";
+        String endStation = "SAT_FR_PA_WXNGQ";
+        String ddate = "2023-05-18 07:00";
 
         PassengerTypeAttributes passengerTypeAttributes = new PassengerTypeAttributes();
         passengerTypeAttributes.setType("Search::PassengerType::Adult");
@@ -92,13 +92,13 @@ public class BaseAPIBookTest {
         List<String> departureTimes = response.jsonPath().getList("results.departure_datetime");
         System.out.println(departureTimes.size());
         for (int i = 0; i < departureTimes.size(); i ++) {
-            System.out.println("departure_time=" + departureTimes.get(i));
+            System.out.println(i + "." + "departure_time=" + departureTimes.get(i));
         }
 
         List<Object> prices = response.jsonPath().getList("results.best_price");
         System.out.println(prices.size());
         for (int i = 0; i < prices.size(); i ++) {
-            System.out.println("second_class=" + prices.get(i));
+            System.out.println(i + "." + "second_class=" + prices.get(i));
         }
     }
 

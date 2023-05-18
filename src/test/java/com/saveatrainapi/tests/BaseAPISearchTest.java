@@ -24,9 +24,9 @@ import static io.restassured.RestAssured.*;
 
 public class BaseAPISearchTest {
 
-    String orgStation = "SAT_FR_MA_XYPQB";
-    String endStation = "SAT_FR_TO_AWHSU";
-    String ddate = "2023-04-05";
+    String orgStation = "SAT_FR_PA_WXNGQ";
+    String endStation = "SAT_NL_AM_WGRFL";
+    String ddate = "2023-05-20";
 
     @BeforeMethod()
     public void beforeMethod(Method m) {
@@ -64,13 +64,13 @@ public class BaseAPISearchTest {
         List<String> departureTimes = response.jsonPath().getList("result.outbound.departure_time");
         System.out.println(departureTimes.size());
         for (int i = 0; i < departureTimes.size(); i ++) {
-            System.out.println("departure_time=" + departureTimes.get(i));
+            System.out.println(i + "." + "departure_time=" + departureTimes.get(i));
         }
 
         List<Object> prices = response.jsonPath().getList("result.outbound.price.second_class");
         System.out.println(prices.size());
         for (int i = 0; i < prices.size(); i ++) {
-            System.out.println("second_class=" + prices.get(i));
+            System.out.println(i + "." + "second_class=" + prices.get(i));
         }
     }
 
