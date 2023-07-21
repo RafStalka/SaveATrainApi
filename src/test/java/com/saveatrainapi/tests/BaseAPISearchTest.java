@@ -1,5 +1,6 @@
 package com.saveatrainapi.tests;
 
+import com.saveatrainapi.utils.ExcelReader;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -7,7 +8,7 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
@@ -20,31 +21,9 @@ import static io.restassured.RestAssured.*;
 
 public class BaseAPISearchTest {
 
-    String orgStation = "SAT_DE_FR_OKZDY";
-    String endStation = "SAT_CH_ZU_TDHRA";
-    String ddate = "2023-05-25";
-
-    /*@BeforeMethod()
-    public void beforeMethod(Method m) {
-        System.out.println("STARTING TEST: " + m.getName());
-        RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
-        requestSpecBuilder.setUrlEncodingEnabled(false);
-        requestSpecBuilder.setBaseUri("https://apisearch.saveatrain.com/search/" + orgStation + "/" + endStation);
-        requestSpecBuilder.addParam("triptype", "1");
-        requestSpecBuilder.addParam("passengers", "1");
-        requestSpecBuilder.addParam("ddate", ddate);
-        requestSpecBuilder.addParam("email", "test"+"@"+"saveatrain.com");
-        requestSpecBuilder.addParam("password", "bALJat8279B");
-        requestSpecBuilder.log(LogDetail.ALL);
-
-        RestAssured.requestSpecification = requestSpecBuilder.build();
-
-        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder().
-                expectStatusCode(200).
-                expectContentType(ContentType.TEXT);
-                //log(LogDetail.ALL);
-        RestAssured.responseSpecification = responseSpecBuilder.build();
-    }*/
+    String orgStation = "SAT_FR_NA_CZQYH";
+    String endStation = "SAT_FR_BO_OMKAT";
+    String ddate = "2023-07-24";
 
     @Test(priority = 1)
     public void getFirstDatePricesUpdatedAPISEARCH(Method m) {
@@ -57,7 +36,7 @@ public class BaseAPISearchTest {
         requestSpecBuilder.addParam("ddate", ddate);
         requestSpecBuilder.addParam("email", "test"+"@"+"saveatrain.com");
         requestSpecBuilder.addParam("password", "bALJat8279B");
-        //requestSpecBuilder.log(LogDetail.ALL);
+        requestSpecBuilder.log(LogDetail.ALL);
 
         RestAssured.requestSpecification = requestSpecBuilder.build();
 
@@ -78,7 +57,7 @@ public class BaseAPISearchTest {
                 extract().response();
 
         List<String> departureTimes = response.jsonPath().getList("result.outbound.departure_time");
-        System.out.println(departureTimes.size());
+        System.out.println("Number of times: ==> " + departureTimes.size() + " from date: " + ddate);
         for (int i = 0; i < departureTimes.size(); i ++) {
             System.out.println(i + "." + "departure_time=" + departureTimes.get(i));
         }
@@ -90,28 +69,25 @@ public class BaseAPISearchTest {
         }
     }
 
-/*    @BeforeMethod()
-    public void beforeSecondMethod(Method m) {
+    @DataProvider(name = "excelData")
+    public Object[][] getExcelData() {
+        // Replace the file path, sheet name, and date format with your actual values
+        String filePath = "/Users/rafalst/IdeaProjects/SaveATrainAPI/src/test/resources/automation.xlsx";
+        String sheetName = "Sheet1";
+        String dateFormat = "yyyy-MM-dd";
+
+        // Call the readExcelData method to get the data from Excel
+        return ExcelReader.readExcelData(filePath, sheetName, dateFormat);
+    }
+    @Test(dataProvider = "excelData")
+    public void probaAPISEARCH(Method m, String col1, String col2, String col3) {
         System.out.println("STARTING TEST: " + m.getName());
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
         requestSpecBuilder.setUrlEncodingEnabled(false);
-        requestSpecBuilder.setBaseUri("https://apisearch.saveatrain.com/search/" + orgStation + "/" + endStation);
+        requestSpecBuilder.setBaseUri("https://apisearch.saveatrain.com/search/" + col1 + "/" + col2);
         requestSpecBuilder.addParam("triptype", "1");
         requestSpecBuilder.addParam("passengers", "1");
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-
-        try {
-            calendar.setTime(sdf.parse(ddate));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        calendar.add(Calendar.DAY_OF_MONTH, 3);
-        String threeDays = sdf.format(calendar.getTime());
-
-        requestSpecBuilder.addParam("ddate", threeDays);
+        requestSpecBuilder.addParam("ddate", col3);
         requestSpecBuilder.addParam("email", "test"+"@"+"saveatrain.com");
         requestSpecBuilder.addParam("password", "bALJat8279B");
         requestSpecBuilder.log(LogDetail.ALL);
@@ -121,9 +97,33 @@ public class BaseAPISearchTest {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder().
                 expectStatusCode(200).
                 expectContentType(ContentType.TEXT);
-                //log(LogDetail.ALL);
+        //log(LogDetail.ALL);
         RestAssured.responseSpecification = responseSpecBuilder.build();
-    }*/
+
+
+        RestAssured.defaultParser = Parser.JSON;
+
+        Response response = given(requestSpecification).
+                when().get().
+                then().spec(responseSpecification).
+                assertThat().
+                statusCode(200).
+                extract().response();
+
+        List<String> departureTimes = response.jsonPath().getList("result.outbound.departure_time");
+        System.out.println("Number of times: ==> " + departureTimes.size() + " from date: " + ddate);
+        for (int i = 0; i < departureTimes.size(); i ++) {
+            System.out.println(i + "." + "departure_time=" + departureTimes.get(i));
+        }
+
+        List<Object> prices = response.jsonPath().getList("result.outbound.price.second_class");
+        System.out.println(prices.size());
+        for (int i = 0; i < prices.size(); i ++) {
+            System.out.println(i + "." + "second_class=" + prices.get(i));
+        }
+    }
+
+
 
     @Test(priority = 2)
     public void getSecondDatePricesUpdatedAPISEARCH(Method m) {
@@ -170,7 +170,7 @@ public class BaseAPISearchTest {
                 extract().response();
 
         List<String> departureTimes = response.jsonPath().getList("result.outbound.departure_time");
-        System.out.println(departureTimes.size());
+        System.out.println("Number of times: ==> " + departureTimes.size() + " from date: " + threeDays);
         for (int i = 0; i < departureTimes.size(); i ++) {
             System.out.println(i + "." + "departure_time=" + departureTimes.get(i));
         }
@@ -181,50 +181,6 @@ public class BaseAPISearchTest {
             System.out.println(i + "." + "second_class=" + prices.get(i));
         }
     }
-
-/*    @BeforeMethod()
-    public void beforeThirdMethod(Method m) {
-        System.out.println("STARTING TEST: " + m.getName());
-        RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
-        requestSpecBuilder.setUrlEncodingEnabled(false);
-        requestSpecBuilder.setBaseUri("https://apisearch.saveatrain.com/search/" + orgStation + "/" + endStation);
-        requestSpecBuilder.addParam("triptype", "1");
-        requestSpecBuilder.addParam("passengers", "1");
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-
-        try {
-            calendar.setTime(sdf.parse(ddate));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        calendar.add(Calendar.DAY_OF_MONTH, 3);
-        String threeDays = sdf.format(calendar.getTime());
-
-        try {
-            calendar.setTime(sdf.parse(threeDays));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        calendar.add(Calendar.DAY_OF_MONTH, 14);
-        String fifteenDays = sdf.format(calendar.getTime());
-
-        requestSpecBuilder.addParam("ddate", fifteenDays);
-        requestSpecBuilder.addParam("email", "test"+"@"+"saveatrain.com");
-        requestSpecBuilder.addParam("password", "bALJat8279B");
-        requestSpecBuilder.log(LogDetail.ALL);
-
-        RestAssured.requestSpecification = requestSpecBuilder.build();
-
-        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder().
-                expectStatusCode(200).
-                expectContentType(ContentType.TEXT);
-                //log(LogDetail.ALL);
-        RestAssured.responseSpecification = responseSpecBuilder.build();
-    }*/
 
     @Test(priority = 3)
     public void getThirdDatePricesUpdatedAPISEARCH(Method m) {
@@ -244,16 +200,16 @@ public class BaseAPISearchTest {
             throw new RuntimeException(e);
         }
 
-        calendar.add(Calendar.DAY_OF_MONTH, 3);
+        /*calendar.add(Calendar.DAY_OF_MONTH, 3);
         String threeDays = sdf.format(calendar.getTime());
 
         try {
             calendar.setTime(sdf.parse(threeDays));
         } catch (ParseException e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
-        calendar.add(Calendar.DAY_OF_MONTH, 14);
+        calendar.add(Calendar.DAY_OF_MONTH, 15);
         String fifteenDays = sdf.format(calendar.getTime());
 
         requestSpecBuilder.addParam("ddate", fifteenDays);
@@ -280,7 +236,7 @@ public class BaseAPISearchTest {
                 extract().response();
 
         List<String> departureTimes = response.jsonPath().getList("result.outbound.departure_time");
-        System.out.println(departureTimes.size());
+        System.out.println("Number of times: ==> " + departureTimes.size() + " from date: " + fifteenDays);
         for (int i = 0; i < departureTimes.size(); i ++) {
             System.out.println(i + "." + "departure_time=" + departureTimes.get(i));
         }
@@ -291,59 +247,6 @@ public class BaseAPISearchTest {
             System.out.println(i + "." + "second_class=" + prices.get(i));
         }
     }
-
-/*    @BeforeMethod()
-    public void beforeFourthMethod(Method m) {
-        System.out.println("STARTING TEST: " + m.getName());
-        RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
-        requestSpecBuilder.setUrlEncodingEnabled(false);
-        requestSpecBuilder.setBaseUri("https://apisearch.saveatrain.com/search/" + orgStation + "/" + endStation);
-        requestSpecBuilder.addParam("triptype", "1");
-        requestSpecBuilder.addParam("passengers", "1");
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-
-        try {
-            calendar.setTime(sdf.parse(ddate));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        calendar.add(Calendar.DAY_OF_MONTH, 3);
-        String threeDays = sdf.format(calendar.getTime());
-
-        try {
-            calendar.setTime(sdf.parse(threeDays));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        calendar.add(Calendar.DAY_OF_MONTH, 14);
-        String fifteenDays = sdf.format(calendar.getTime());
-
-        try {
-            calendar.setTime(sdf.parse(fifteenDays));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        calendar.add(Calendar.DAY_OF_MONTH, 20);
-        String thirtyDays = sdf.format(calendar.getTime());
-
-        requestSpecBuilder.addParam("ddate", thirtyDays);
-        requestSpecBuilder.addParam("email", "test"+"@"+"saveatrain.com");
-        requestSpecBuilder.addParam("password", "bALJat8279B");
-        requestSpecBuilder.log(LogDetail.ALL);
-
-        RestAssured.requestSpecification = requestSpecBuilder.build();
-
-        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder().
-                expectStatusCode(200).
-                expectContentType(ContentType.TEXT);
-                //log(LogDetail.ALL);
-        RestAssured.responseSpecification = responseSpecBuilder.build();
-    }*/
 
     @Test(priority = 4)
     public void getFourthDatePricesUpdatedAPISEARCH(Method m) {
@@ -363,25 +266,7 @@ public class BaseAPISearchTest {
             throw new RuntimeException(e);
         }
 
-        calendar.add(Calendar.DAY_OF_MONTH, 3);
-        String threeDays = sdf.format(calendar.getTime());
-
-        try {
-            calendar.setTime(sdf.parse(threeDays));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        calendar.add(Calendar.DAY_OF_MONTH, 14);
-        String fifteenDays = sdf.format(calendar.getTime());
-
-        try {
-            calendar.setTime(sdf.parse(fifteenDays));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        calendar.add(Calendar.DAY_OF_MONTH, 20);
+        calendar.add(Calendar.DAY_OF_MONTH, 37);
         String thirtyDays = sdf.format(calendar.getTime());
 
         requestSpecBuilder.addParam("ddate", thirtyDays);
@@ -408,7 +293,7 @@ public class BaseAPISearchTest {
                 extract().response();
 
         List<String> departureTimes = response.jsonPath().getList("result.outbound.departure_time");
-        System.out.println(departureTimes.size());
+        System.out.println("Number of times: ==> " + departureTimes.size() + " from date: " + thirtyDays);
         for (int i = 0; i < departureTimes.size(); i ++) {
             System.out.println(i + "." + "departure_time=" + departureTimes.get(i));
         }
@@ -419,39 +304,4 @@ public class BaseAPISearchTest {
             System.out.println(i + "." + "second_class=" + prices.get(i));
         }
     }
-
-    /*@DataProvider(name ="excel-data")
-    public Object[][] excelDP() throws IOException {
-        //We are creating an object from the excel sheet data by calling a method that reads data from the excel stored locally in our system
-        Object[][] arrObj = getExcelData("Location of the excel file in your local system","");
-        return arrObj;
-    }
-    //This method handles the excel - opens it and reads the data from the respective cells using a for-loop & returns it in the form of a string array
-    public String[][] getExcelData(String fileName, String sheetName){
-
-        String[][] data = null;
-        try
-        {
-            FileInputStream fis = new FileInputStream(fileName);
-            XSSFWorkbook wb = new XSSFWorkbook(fis);
-            XSSFSheet sh = wb.getSheet(sheetName);
-            XSSFRow row = sh.getRow(0);
-            int noOfRows = sh.getPhysicalNumberOfRows();
-            int noOfCols = row.getLastCellNum();
-            Cell cell;
-            data = new String[noOfRows-1][noOfCols];
-
-            for(int i =1; i<noOfRows;i++){
-                for(int j=0;j<noOfCols;j++){
-                    row = sh.getRow(i);
-                    cell= row.getCell(j);
-                    data[i-1][j] = cell.getStringCellValue();
-                }
-            }
-        }
-        catch (Exception e) {
-            System.out.println("The exception is: " +e.getMessage());
-        }
-        return data;
-    }*/
 }

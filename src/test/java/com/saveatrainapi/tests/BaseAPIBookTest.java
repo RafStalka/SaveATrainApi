@@ -46,9 +46,9 @@ public class BaseAPIBookTest {
 
     @Test
     public void searchPricesApiBook() {
-        String orgStation = "SAT_FR_PA_WXNGQ";
-        String endStation = "SAT_NL_AM_WGRFL";
-        String ddate = "2023-05-25 08:00";
+        String orgStation = "SAT_BE_BR_TKFCQ";
+        String endStation = "SAT_UK_LO_DXLIF";
+        String ddate = "2023-07-17 17:00";
 
         PassengerTypeAttributes passengerTypeAttributes = new PassengerTypeAttributes();
         passengerTypeAttributes.setType("Search::PassengerType::Adult");
