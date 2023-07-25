@@ -13,8 +13,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>19</maven.compiler.target>
         <maven.compiler.source>19</maven.compiler.source>
-        <aspectj.version>1.9.9.1</aspectj.version>
-        <allure.version>2.20.1</allure.version>
+        <aspectj.version>1.9.19</aspectj.version>
+        <allure.version>2.23.0</allure.version>
     </properties>
 
     <dependencies>
@@ -27,13 +27,7 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-schema-validator</artifactId>
-            <version>5.3.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.7.0</version>
+            <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -67,7 +61,7 @@
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-rest-assured</artifactId>
-            <version>2.20.0</version>
+            <version>2.23.0</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -106,11 +100,26 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.0.0-M5</version>
                 <configuration>
+                    <useFile>false</useFile>
                     <testFailureIgnore>true</testFailureIgnore>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testng.xml</suiteXmlFile> <!-- Replace with your TestNG XML file -->
+                    </suiteXmlFiles>
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>io.qameta.allure.testng.AllureTestNg</value>
+                        </property>
+                    </properties>
                     <argLine>
+                        -Dorg.uncommons.reportng.escape-output=false
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                        -Dtestng.verbose=${testng.verbose}
+                        -Dtestng.dtd.http=${testng.dtd.http}
+                        <!-- Set the property to enable capturing console logs -->
+                        -Dallure.console.logs=true
                     </argLine>
                     <systemProperties>
                         <property>

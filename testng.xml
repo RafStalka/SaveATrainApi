@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Your Test Suite">
+    <test name="Your Test Suite">
+        <!-- Define your test classes here -->
+        <classes>
+            <class name="com.saveatrainapi.tests.BaseAPISearchTest" />
+            <!--<class name="com.saveatrainapi.tests.BaseAPIBookTest" />-->
+            <!-- Add more test classes as needed -->
+        </classes>
+    </test>
+
+    <!-- You can add more test sections if you have multiple test configurations -->
+
+    <!-- Configuration for generating Allure report -->
+
+</suite>
