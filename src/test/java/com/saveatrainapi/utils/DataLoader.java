@@ -7,7 +7,7 @@ public class DataLoader {
     private static DataLoader dataLoader;
 
     private DataLoader() {
-        properties = PropertyUtlis.propertyLoader("src/test/resources/data.properties");
+        properties = PropertyUtils.propertyLoader("src/test/resources/data.properties");
     }
 
     public static DataLoader getInstance() {
@@ -17,11 +17,27 @@ public class DataLoader {
         return dataLoader;
     }
 
-    public String getClientId() {
-        String prop = properties.getProperty("client_id");
+    public String getTotalPrice() {
+        String prop = properties.getProperty("totalPricePath");
         if (prop != null) return prop;
         else
             throw new RuntimeException(
-                    "Property client_id is not specified in the config.properties file");
+                    "Property total price is not specified in the file");
+    }
+
+    public String getTotalOrders() {
+        String prop = properties.getProperty("totalOrderPath");
+        if (prop != null) return prop;
+        else
+            throw new RuntimeException(
+                    "Property total order is not specified in the file");
+    }
+
+    public String getTotalPurchases() {
+        String prop = properties.getProperty("totalPurchases");
+        if (prop != null) return prop;
+        else
+            throw new RuntimeException(
+                    "Property total purchases is not specified in the file");
     }
 }
