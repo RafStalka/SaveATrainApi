@@ -13,7 +13,6 @@ import io.restassured.response.Response;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import static io.restassured.RestAssured.*;
@@ -32,8 +31,8 @@ public class BaseAPISearchTest {
     }
 
     @Test(dataProvider = "excelData")
-    public void probaAPISEARCH(Method m, String col1, String col2, String col3) {
-        stepStartTest(m.getName());
+    public void probaAPISEARCH(String col1, String col2, String col3, String col4) {
+        stepStartTest(col1);
         stepPerformApiRequest(col1, col2, col3);
     }
 
@@ -98,50 +97,3 @@ public class BaseAPISearchTest {
         }
     }
 }
-
-    /*@Test(dataProvider = "excelData")
-    public void probaAPISEARCH(Method m, String col1, String col2, String col3) {
-        System.out.println("STARTING TEST: " + m.getName());
-        RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
-        requestSpecBuilder.setUrlEncodingEnabled(false);
-        requestSpecBuilder.setBaseUri("https://apisearch.saveatrain.com/search/" + col1 + "/" + col2);
-        requestSpecBuilder.addParam("triptype", "1");
-        requestSpecBuilder.addParam("passengers", "1");
-        requestSpecBuilder.addParam("ddate", col3);
-        requestSpecBuilder.addParam("email", "test"+"@"+"saveatrain.com");
-        requestSpecBuilder.addParam("password", "bALJat8279B");
-        requestSpecBuilder.log(LogDetail.ALL);
-
-        RestAssured.requestSpecification = requestSpecBuilder.build();
-
-        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder().
-                expectStatusCode(200).
-                expectContentType(ContentType.TEXT);
-        //log(LogDetail.ALL);
-        RestAssured.responseSpecification = responseSpecBuilder.build();
-
-
-        RestAssured.defaultParser = Parser.JSON;
-
-        Response response = given(requestSpecification).
-                when().get().
-                then().spec(responseSpecification).
-                assertThat().
-                statusCode(200).
-                extract().response();
-
-        List<String> departureTimes = response.jsonPath().getList("result.outbound.departure_time");
-        System.out.println("Number of times: ==> " + departureTimes.size() + " from date: " + col3);
-        for (int i = 0; i < departureTimes.size(); i ++) {
-            System.out.println(i + "." + "departure_time=" + departureTimes.get(i));
-        }
-
-        List<Object> prices = response.jsonPath().getList("result.outbound.price.second_class");
-        System.out.println(prices.size());
-        for (int i = 0; i < prices.size(); i ++) {
-            System.out.println(i + "." + "second_class=" + prices.get(i));
-        }
-
-    }
-
-}*/
