@@ -17,6 +17,21 @@ public class ConfigLoader {
     return configLoader;
   }
 
+  public String getHeaderEVercel() {
+    String prop = properties.getProperty("userEHeaderVercel");
+    if (prop != null) return prop;
+    else
+      throw new RuntimeException(
+              "Property headerE is not specified in the config.properties file");
+  }
+
+  public String getHeaderTVercel() {
+    String prop = properties.getProperty("userTHeaderVercel");
+    if (prop != null) return prop;
+    else
+      throw new RuntimeException(
+              "Property headerT is not specified in the config.properties file");
+  }
   public String getHeaderE() {
     String prop = properties.getProperty("userEHeader");
     if (prop != null) return prop;
@@ -32,6 +47,8 @@ public class ConfigLoader {
       throw new RuntimeException(
               "Property headerT is not specified in the config.properties file");
   }
+
+
 
   public String getParamPage() {
     String prop = properties.getProperty("paramPage");
@@ -65,8 +82,8 @@ public class ConfigLoader {
               "Property paramPPValue is not specified in the config.properties file");
   }
 
-  public String getIEmail() {
-    String prop = properties.getProperty("iEmail");
+  public String getIEmailVercel() {
+    String prop = properties.getProperty("iEmailVercel");
     if (prop != null) return prop;
     else
       throw new RuntimeException(
@@ -89,8 +106,8 @@ public class ConfigLoader {
               "Property TRafal is not specified in the config.properties file");
   }
 
-  public String getTIdan() {
-    String prop = properties.getProperty("tIdan");
+  public String getTIdanVercel() {
+    String prop = properties.getProperty("tIdanVercel");
     if (prop != null) return prop;
     else
       throw new RuntimeException(

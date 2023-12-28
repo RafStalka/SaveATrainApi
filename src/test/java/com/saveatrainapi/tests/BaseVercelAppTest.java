@@ -24,8 +24,8 @@ public class BaseVercelAppTest {
         requestSpecBuilder.setUrlEncodingEnabled(false);
         requestSpecBuilder.setContentType(ContentType.JSON);
         requestSpecBuilder.setBaseUri(ConfigLoader.getInstance().getSATOrder());
-        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderE(), ConfigLoader.getInstance().getIEmail());
-        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderT(), ConfigLoader.getInstance().getTIdan());
+        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderEVercel(), ConfigLoader.getInstance().getIEmailVercel());
+        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderTVercel(), ConfigLoader.getInstance().getTIdanVercel());
         requestSpecBuilder.addQueryParam(ConfigLoader.getInstance().getParamPage(), ConfigLoader.getInstance().getParamPageValue());
         requestSpecBuilder.addQueryParam(ConfigLoader.getInstance().getParamPerPage(), ConfigLoader.getInstance().getParamPerPageValue());
         requestSpecBuilder.log(LogDetail.ALL);
@@ -67,8 +67,8 @@ public class BaseVercelAppTest {
         requestSpecBuilder.setUrlEncodingEnabled(false);
         requestSpecBuilder.setContentType(ContentType.JSON);
         requestSpecBuilder.setBaseUri(ConfigLoader.getInstance().getSATBalance());
-        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderE(), ConfigLoader.getInstance().getIEmail());
-        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderT(), ConfigLoader.getInstance().getTIdan());
+        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderEVercel(), ConfigLoader.getInstance().getIEmailVercel());
+        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderTVercel(), ConfigLoader.getInstance().getTIdanVercel());
         requestSpecBuilder.log(LogDetail.ALL);
         RequestSpecification requestSpecification = requestSpecBuilder.build();
 

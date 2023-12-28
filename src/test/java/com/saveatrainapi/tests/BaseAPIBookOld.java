@@ -21,15 +21,15 @@ public class BaseAPIBookOld {
     public void searchPricesApiBook(Method m) {
         String orgStation = "SAT_FR_PA_WXNGQ";
         String endStation = "SAT_FR_HE_TWOHA";
-        String ddate = "2023-12-22 16:00";
+        String ddate = "2023-12-28 16:00";
 
         System.out.println("STARTING TEST: " + m.getName());
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
         requestSpecBuilder.setUrlEncodingEnabled(false);
         requestSpecBuilder.setContentType(ContentType.JSON);
         requestSpecBuilder.setBaseUri(ConfigLoader.getInstance().getApiBook());
-        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderE(), "rafal@saveatrain.com");
-        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderT(), "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpbnN0YW5zZV9jbGFzcyI6IlNhbGVzQWdlbnQiLCJpbnN0YW5jZV9pZCI6MzAsImV4cGlyYXRpb25fdGltZSI6IjIwMjQtMDQtMjQgMTU6MTQ6NTIgVVRDIn0.CImLWJtI_dahynJmbtDk5ko13z1qQaLeQ2COnx7ZCok");
+        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderE(), ConfigLoader.getInstance().getREmail());
+        requestSpecBuilder.addHeader(ConfigLoader.getInstance().getHeaderT(), ConfigLoader.getInstance().getTRafal());
         requestSpecBuilder.log(LogDetail.ALL);
 
         RestAssured.requestSpecification = requestSpecBuilder.build();
