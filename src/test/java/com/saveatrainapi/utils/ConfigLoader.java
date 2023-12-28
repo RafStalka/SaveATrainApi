@@ -137,4 +137,13 @@ public class ConfigLoader {
       throw new RuntimeException(
               "Property api book is not specified in the config.properties file");
   }
+
+  public String getVendor() {
+    String prop = properties.getProperty("vendorURI");
+    if (prop != null) return prop;
+    else
+      throw new RuntimeException(
+              "Property api book is not specified in the config.properties file");
+  }
+
 }
