@@ -3,7 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 /*/allure-results/
-.allure
+.allure/
 *.jar
 
 ### IntelliJ IDEA ###
@@ -14,7 +14,6 @@ target/
 *.iws
 *.iml
 *.ipr
-.allure
 
 
 

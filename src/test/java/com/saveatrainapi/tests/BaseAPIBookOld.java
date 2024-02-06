@@ -19,9 +19,9 @@ import static io.restassured.RestAssured.responseSpecification;
 public class BaseAPIBookOld {
     @Test
     public void searchPricesApiBook(Method m) {
-        String orgStation = "SAT_FR_PA_WXNGQ";
-        String endStation = "SAT_FR_HE_TWOHA";
-        String ddate = "2023-12-28 16:00";
+        String orgStation = "SAT_CH_ZU_TDHRA";
+        String endStation = "SAT_DE_FR_OKZDY";
+        String ddate = "2024-03-08 09:00";
 
         System.out.println("STARTING TEST: " + m.getName());
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();

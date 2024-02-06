@@ -122,12 +122,28 @@ public class ConfigLoader {
               "Property SATBalance is not specified in the config.properties file");
   }
 
+  public String getPRODBalance() {
+    String prop = properties.getProperty("prodURIBalance");
+    if (prop != null) return prop;
+    else
+      throw new RuntimeException(
+              "Property prodURIBalance is not specified in the config.properties file");
+  }
+
   public String getSATOrder() {
     String prop = properties.getProperty("satURIOrder");
     if (prop != null) return prop;
     else
       throw new RuntimeException(
               "Property SATOrder is not specified in the config.properties file");
+  }
+
+  public String getPRODOrder() {
+    String prop = properties.getProperty("prodURIOrder");
+    if (prop != null) return prop;
+    else
+      throw new RuntimeException(
+              "Property prodURIOrder is not specified in the config.properties file");
   }
 
   public String getApiBook() {

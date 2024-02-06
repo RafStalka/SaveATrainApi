@@ -26,7 +26,7 @@ public class VendorApiPRODE2EPathTest {
 
         String requestBody = "{" +
                 "\"search\": {" +
-                "\"departure_datetime\": \"2023-12-29 07:00\"," +
+                "\"departure_datetime\": \"2024-01-29 07:00\"," +
                 "\"searches_passengers_attributes\": {" +
                 "\"0\": {" +
                 "\"age\": 21," +
@@ -37,10 +37,10 @@ public class VendorApiPRODE2EPathTest {
                 "}," +
                 "\"route_attributes\": {" +
                 "\"origin_station_attributes\": {" +
-                "\"uid\": \"SAT_IT_RO_JXWUR\"" +
+                "\"uid\": \"SAT_CH_ZU_TDHRA\"" +
                 "}," +
                 "\"destination_station_attributes\": {" +
-                "\"uid\": \"SAT_IT_RI_WJCXV\"" +
+                "\"uid\": \"SAT_DE_FR_OKZDY\"" +
                 "}" +
                 "}" +
                 "}" +
