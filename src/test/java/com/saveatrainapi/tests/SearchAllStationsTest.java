@@ -24,6 +24,7 @@ public class SearchAllStationsTest {
                 then().
                 assertThat().
                 statusCode(200).
+                //test connection
                 extract().
                 response();
         String stringResponse = response.getBody().asString();
